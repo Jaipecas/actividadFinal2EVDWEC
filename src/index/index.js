@@ -14,6 +14,8 @@ const form = document.getElementsByTagName('form')[0];
 //const loader = document.getElementById('loader');
 const errorMessage = document.getElementById('error');
 
+let loginData;
+
 function showLoginError(error) {
     errorMessage.innerText = error;
     errorMessage.classList.add('show');
@@ -25,7 +27,7 @@ async function signIn(username, pass) {
         if (form.checkValidity()) {
             //falta avtivar el loader
             //loader.classList.add('active')
-            await Player.loginFetch(username, pass);
+            loginData = await Player.loginFetch(username, pass);
             //falta desactivar el loader
             form.classList.add('was-validated')
         }

@@ -11,7 +11,7 @@ const stylesHandler = 'style-loader';
 
 
 const config = {
-    entry: ["regenerator-runtime/runtime.js", './src/index/index.js'],
+    entry: ["regenerator-runtime/runtime.js", './src/list/list.js'],
     output: {
         path: path.resolve(__dirname, 'dist'),
     },
@@ -21,9 +21,9 @@ const config = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: './src/index/index.html',
+            template: './src/list/list.html',
         }),
-    
+
         // Add your plugins here
         // Learn more about plugins from https://webpack.js.org/configuration/plugins/
     ],
@@ -38,7 +38,11 @@ const config = {
             },
             {
                 test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-                type: 'asset',
+                type: 'asset/resource',
+            },
+            {
+                test: /\.html$/i,
+                loader: "html-loader",
             },
 
             // Add your rules for custom modules here
