@@ -11,7 +11,11 @@ const stylesHandler = 'style-loader';
 
 
 const config = {
-    entry: ["regenerator-runtime/runtime.js", './src/list/list.js'],
+    entry: {
+        index: ["regenerator-runtime/runtime.js", './src/index/index.js'],
+        list: ["regenerator-runtime/runtime.js", './src/list/list.js'],
+        game: ["regenerator-runtime/runtime.js", './src/game/game.js']
+    },
     output: {
         path: path.resolve(__dirname, 'dist'),
     },
@@ -21,7 +25,19 @@ const config = {
     },
     plugins: [
         new HtmlWebpackPlugin({
+            filename: 'index.html',
+            template: './src/index/index.html',
+            chunks: ['index'],
+        }),
+        new HtmlWebpackPlugin({
+            filename: 'list.html',
             template: './src/list/list.html',
+            chunks: ['list'],
+        }),
+        new HtmlWebpackPlugin({
+            filename: 'game.html',
+            template: './src/game/game.html',
+            chunks: ['game'],
         }),
 
         // Add your plugins here
