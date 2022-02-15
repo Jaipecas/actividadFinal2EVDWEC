@@ -1,10 +1,11 @@
 class Game {
     
-    constructor (id, player, date, result) {
+    constructor (id, player, date, result, firstMovement) {
         this.id = id;
         this.player = player;
         this.date = date;
         this.result = result;
+        this.firstMovement = firstMovement
     }
 
     static async getGameData(token, gameId){
@@ -20,7 +21,7 @@ class Game {
             
             //ACORDARSE DE HACER UNA MEJOR CONVERSION JSON-CLASS
             const json = await response.json();
-            let game = new Game(json.id, json.player, json.date, json.result);
+            let game = new Game(json.id, json.player, json.date, json.result, json.first_movement);
             
             return game;
         } catch (error) {

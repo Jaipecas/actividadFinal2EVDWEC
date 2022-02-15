@@ -1,20 +1,24 @@
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'regenerator-runtime/runtime';
-import '../index/index.css'
+import '../common/common.css'
+import '../index/index.css';
 import {
     Player
 } from '../classes/player';
 
-//traer los elementos necesarios para la autentucación
-
 const pass = document.getElementById('password');
 const username = document.getElementById('username');
 const form = document.getElementsByTagName('form')[0];
-//const loader = document.getElementById('loader');
+const loader = document.getElementById('loader');
 const errorMessage = document.getElementById('error');
 
-let loginData;
+function saveInStorage(token, playerId) {
+    localStorage.clear();
+    localStorage.setItem('token', token);
+    localStorage.setItem('playerId', playerId);
+}
+
 
 function showLoginError(error) {
     errorMessage.innerText = error;
@@ -22,14 +26,14 @@ function showLoginError(error) {
 }
 
 async function signIn(username, pass) {
-
     try {
         if (form.checkValidity()) {
-            //falta avtivar el loader
-            //loader.classList.add('active')
-            loginData = await Player.loginFetch(username, pass);
-            //falta desactivar el loader
+            loader.classList.add('active')
+            let loginData = await Player.loginFetch(username, pass);
+            loader.classList.remove('active')
             form.classList.add('was-validated')
+            saveInStorage(loginData.access_token, loginData.player_id);
+            location = `${location.href}list.html?player=${loginData.player_id}`;
         }
     } catch (error) {
         showLoginError(error);
