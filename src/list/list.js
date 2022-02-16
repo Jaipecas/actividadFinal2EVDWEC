@@ -14,8 +14,27 @@ import {
 const headerPlayerName = document.getElementById('player-name');
 const loader = document.getElementById('loader');
 
-function builgBoardTemplate(result) {
+
+function buildGameInfoTemplate(id, date) {
     let html = "";
+
+    html += "<div class='card p-1'>";
+    html += " <h5 class='game-info'>";
+    html += "Game #" + id;
+    html += " </h5>";
+    html += " <div class='date'>";
+    html += date;
+    html += "</div>";
+    html += " </div>";
+
+    return html;
+}
+
+function builgBoardTemplate(result, id) {
+    let html = "";
+
+    html += " <div class='card mt-1 p-2 align-items-center'>";
+    html += " <div class='preview'>";
 
     result.forEach(line => {
         html += "<div class='line'>";
@@ -36,35 +55,25 @@ function builgBoardTemplate(result) {
         })
         html += "</div>"
     })
+
+    html += " </div>";
+    html += " <button class='btn btn-smttt btn-primary view-button' data-game=" + id + ">View game</button>";
+    html += " </div>";
     return html;
 }
-
 
 function buildGameTemplate(gamesData) {
     const gameList = document.getElementById('game-list');
     let html = "";
 
-    if (gamesData.length !== undefined) {
+    if (gamesData.length !== 0) {
         gamesData.forEach(game => {
             let date = new Date(game.date);
 
             html += " <ol class='game m-3'> ";
-            html += "<div class='card p-1'>";
-            html += " <h5 class='game-info'>"
-            html += "Game #" + game.id
-            html += " </h5>"
-            html += " <div class='date'>"
-            html += date.toLocaleString()
-            html += "</div>"
-            html += " </div>";
-            html += " <div class='card mt-1 p-2 align-items-center'>"
-            html += " <div class='preview'>"
-            html += builgBoardTemplate(game.result)
-            html += " </div>"
-            html += " <button class='btn btn-smttt btn-primary view-button' data-game=" + game.id + ">View game</button>"
-            html += " </div>"
+            html += buildGameInfoTemplate(game.id, date.toLocaleString());
+            html += builgBoardTemplate(game.result, game.id)
             html += "</ol>";
-
         });
     } else {
         html = "<p>No Games</p>"
@@ -79,14 +88,16 @@ async function loadPlayerData(token, id) {
         headerPlayerName.innerText = player.name;
     } catch (error) {
         console.log(error);
+        if (error === 401) location = location.origin;
     }
 }
 
 function addButtonsListeners(gamesData) {
-    const gameButtons = document.getElementsByTagName('button');
- 
+    let gameButtons = document.getElementsByTagName('button');
+    let gameButtonsArray = Array.from(gameButtons);
+
     gamesData.forEach(game => {
-        gameButtons.map(button => button.addEventListener('click', () => location = `${location.href}game.html?game=${game.id}&movement=${game.firstMovement}`))
+        gameButtonsArray.map(button => button.addEventListener('click', () => location = `game.html?game=${game.id}&movement=${game.firstMovement}`))
     })
 }
 
@@ -99,6 +110,7 @@ async function loadGamesData(token, id) {
         addButtonsListeners(gamesData);
     } catch (error) {
         console.log(error);
+        if (error === 401) location = location.origin;
     }
 }
 

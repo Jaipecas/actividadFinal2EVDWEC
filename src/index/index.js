@@ -19,10 +19,10 @@ function saveInStorage(token, playerId) {
     localStorage.setItem('playerId', playerId);
 }
 
-
 function showLoginError(error) {
     errorMessage.innerText = error;
     errorMessage.classList.add('show');
+    loader.classList.remove('active')
 }
 
 async function signIn(username, pass) {

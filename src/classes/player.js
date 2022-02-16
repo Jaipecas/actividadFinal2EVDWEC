@@ -38,8 +38,7 @@ class Player {
                     "authorization": `Bearer ${token}`
                 }
             });
-            if (response.status === 404) return Promise.reject(`Jugador no encontrado`);
-            if (response.status !== 200) return Promise.reject(`Error: ${response.status}`);
+            if (response.status !== 200) return Promise.reject(response.status);
             
             const json = await response.json();
 
