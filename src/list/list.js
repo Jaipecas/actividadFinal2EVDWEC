@@ -13,7 +13,7 @@ import {
 
 const headerPlayerName = document.getElementById('player-name');
 const loader = document.getElementById('loader');
-
+let gamesData;
 
 function buildGameInfoTemplate(id, date) {
     let html = "";
@@ -81,8 +81,20 @@ function buildGameTemplate(gamesData) {
     gameList.innerHTML = html;
 }
 
+function addButtonsListeners(gamesData) {
+    let gameButtons = document.getElementsByTagName('button');
+    let gameButtonsArray = Array.from(gameButtons);
+
+    gameButtonsArray.forEach(button => {
+        button.addEventListener('click', (button) => {
+            const gameIdClicked = button.target.dataset.game;
+            const gameCliked = gamesData.find(game => game.id == gameIdClicked)
+            location = `game.html?game=${gameIdClicked}&movement=${gameCliked.firstMovement}`
+        })
+    })
+}
+
 async function loadPlayerData(token, id) {
-    //get player data
     try {
         let player = await Player.getPlayerInfo(token, id);
         headerPlayerName.innerText = player.name;
@@ -92,20 +104,12 @@ async function loadPlayerData(token, id) {
     }
 }
 
-function addButtonsListeners(gamesData) {
-    let gameButtons = document.getElementsByTagName('button');
-    let gameButtonsArray = Array.from(gameButtons);
-
-    gamesData.forEach(game => {
-        gameButtonsArray.map(button => button.addEventListener('click', () => location = `game.html?game=${game.id}&movement=${game.firstMovement}`))
-    })
-}
-
 async function loadGamesData(token, id) {
     try {
         let arrayGames = await Player.getPlayerGames(token, id);
         let gameArrayPromise = arrayGames.map(gameId => Game.getGameData(token, gameId));
-        let gamesData = await Promise.all(gameArrayPromise);
+        gamesData = await Promise.all(gameArrayPromise);
+
         buildGameTemplate(gamesData);
         addButtonsListeners(gamesData);
     } catch (error) {
@@ -113,7 +117,7 @@ async function loadGamesData(token, id) {
         if (error === 401) location = location.origin;
     }
 }
-
+//quiza cambiar 
 async function loadWindow() {
     loader.classList.add('active');
     loadPlayerData(localStorage.token, localStorage.playerId);
