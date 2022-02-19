@@ -6,7 +6,7 @@ import 'regenerator-runtime/runtime';
 import 'node-fetch';
 import {
     Movement
-} from '../classes/movement';
+} from '../classes/Movement';
 
 
 const loader = document.getElementById('loader');

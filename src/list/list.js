@@ -6,10 +6,10 @@ import 'regenerator-runtime/runtime';
 import 'node-fetch';
 import {
     Player
-} from '../classes/player.js';
+} from '../classes/Player.js';
 import {
     Game
-} from '../classes/game';
+} from '../classes/Game';
 
 const headerPlayerName = document.getElementById('player-name');
 const loader = document.getElementById('loader');

@@ -5,7 +5,7 @@ import '../common/common.css'
 import '../index/index.css';
 import {
     Player
-} from '../classes/player';
+} from '../classes/Player';
 
 const pass = document.getElementById('password');
 const username = document.getElementById('username');
