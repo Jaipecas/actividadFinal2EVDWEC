@@ -100,7 +100,6 @@ async function loadPlayerData(token, id) {
         headerPlayerName.innerText = player.name;
     } catch (error) {
         console.log(error);
-        if (error === 401) location = location.origin;
     }
 }
 
@@ -114,7 +113,6 @@ async function loadGamesData(token, id) {
         addButtonsListeners(gamesData);
     } catch (error) {
         console.log(error);
-        if (error === 401) location = location.origin;
     }
 }
 //quiza cambiar 

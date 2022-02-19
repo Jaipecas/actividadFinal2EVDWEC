@@ -75,7 +75,6 @@ async function loadMovements(game, firstMovement) {
         }
     } catch (error) {
         console.log(error);
-        if (error === 401) location = location.origin;
     }
 }
 

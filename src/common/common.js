@@ -1,3 +1,4 @@
+import fetch from 'node-fetch';
 
 async function fetchPOST(url, contentType, body) {
     try {
@@ -26,7 +27,8 @@ async function fetchGET(url, token) {
                 "authorization": `Bearer ${token}`
             }
         });
-        if (response.status !== 200) return Promise.reject(response.status);
+        if (response.status === 401) location = location.origin;
+        if (response.status !== 200) return Promise.reject(`Error: ${response.status}`);
 
         const json = await response.json();
         return json;
