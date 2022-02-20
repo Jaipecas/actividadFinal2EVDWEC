@@ -1,7 +1,9 @@
-import { fetchGET } from "../common/common";
+import {
+    fetchGET
+} from "../common/common";
 class Game {
-    
-    constructor (id, player, date, result, firstMovement) {
+
+    constructor(id, player, date, result, firstMovement) {
         this.id = id;
         this.player = player;
         this.date = date;
@@ -9,9 +11,10 @@ class Game {
         this.firstMovement = firstMovement
     }
 
-    static async getGameData(token, gameId){
-        const result = await fetchGET(`https://dwec-tres-en-raya.herokuapp.com/game/${gameId}`, token);
-        return new Game(result.id, result.player, result.date, result.result, result.first_movement);
+    static async getGameData(token, gameId) {
+        const response = await fetchGET(`https://dwec-tres-en-raya.herokuapp.com/game/${gameId}`, token);
+        const json = await response.json();
+        return new Game(json.id, json.player, json.date, json.result, json.first_movement);
     }
 }
 

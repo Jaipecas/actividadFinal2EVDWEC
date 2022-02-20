@@ -9,7 +9,18 @@ jest.mock('node-fetch');
 
 describe('fetchGET', () => {
 
-  /*  it('fetchs the URL') */
+  it('fetchs the URL', async () => {
+    const response = {
+      status: 200,
+      url: 'https://dwec-tres-en-raya.herokuapp.com/player/3'
+    }
+
+    fetch.mockResolvedValueOnce(response);
+
+    const result = await fetchGET('https://dwec-tres-en-raya.herokuapp.com/player/3', 'abcd');
+
+    expect(result.url).toBe('https://dwec-tres-en-raya.herokuapp.com/player/3');
+  })
 
   it('returns the json data', async () => {
     const response = {
@@ -25,11 +36,27 @@ describe('fetchGET', () => {
 
     fetch.mockResolvedValueOnce(response);
 
-    const data = await fetchGET('https://dwec-tres-en-raya.herokuapp.com/player/3', '')
+    const result = await fetchGET('https://dwec-tres-en-raya.herokuapp.com/player/3', 'abcd');
+    const data = await result.json();
+
     expect(data.name).toBe('Player 3');
   })
 
-  //it('includes the authorization token')
+  it('includes the authorization token', async () => {
+    const response = {
+      status: 200,
+      headers: {
+        "authorization": `Bearer abcd`
+      }
+    }
+
+    fetch.mockResolvedValueOnce(response);
+
+    const result = await fetchGET('https://dwec-tres-en-raya.herokuapp.com/player/3', 'abcd');
+
+    expect(result.headers.authorization).toBe('Bearer abcd');
+
+  })
 
   describe('when the api returns an error', () => {
     it('returns the error', async () => {
@@ -40,7 +67,7 @@ describe('fetchGET', () => {
       fetch.mockResolvedValueOnce(response);
 
       try {
-        await fetchGET('https://dwec-tres-en-raya.herokuapp.com/player/3333', '');
+        await fetchGET('https://dwec-tres-en-raya.herokuapp.com/player/3333', 'abcd');
       } catch (error) {
         expect(error).toBe(`Error: 500`);
       }
@@ -56,13 +83,13 @@ describe('fetchGET', () => {
       Object.defineProperty(window.location, 'href', {
         writable: true,
         value: 'https://dwec-tres-en-raya.herokuapp.com/player'
-    });
+      });
 
       console.log(location.href);
 
       fetch.mockResolvedValueOnce(response);
 
-      await fetchGET('https://dwec-tres-en-raya.herokuapp.com/player/3333', '');
+      await fetchGET('https://dwec-tres-en-raya.herokuapp.com/player/3333', 'abcd');
 
       //expect(window.location.href).toEqual(url);
 

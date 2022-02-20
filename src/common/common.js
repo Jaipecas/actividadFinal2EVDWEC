@@ -30,8 +30,7 @@ async function fetchGET(url, token) {
         if (response.status === 401) location = location.origin;
         if (response.status !== 200) return Promise.reject(`Error: ${response.status}`);
 
-        const json = await response.json();
-        return json;
+        return response;
     } catch (error) {
         return Promise.reject(error.message);
     }
