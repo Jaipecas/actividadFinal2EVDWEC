@@ -14,7 +14,6 @@ const loader = document.getElementById('loader');
 const errorMessage = document.getElementById('error');
 
 function saveInStorage(token, playerId) {
-    localStorage.clear();
     localStorage.setItem('token', token);
     localStorage.setItem('playerId', playerId);
 }
@@ -25,15 +24,20 @@ function showLoginError(error) {
     loader.classList.remove('active')
 }
 
+function changeWindow(playerId) {
+    localStorage.lastWindow ? location = localStorage.lastWindow : location = `${location.origin}/list.html?player=${playerId}`;
+}
+
 async function signIn(username, pass) {
     try {
         if (form.checkValidity()) {
             loader.classList.add('active')
             const loginData = await Player.loginFetch(username, pass);
+            console.log(loginData)
             loader.classList.remove('active')
             form.classList.add('was-validated')
             saveInStorage(loginData.access_token, loginData.player_id);
-            location = `${location.href}list.html?player=${loginData.player_id}`;
+            changeWindow(loginData.player_id);
         }
     } catch (error) {
         showLoginError(error);

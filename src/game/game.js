@@ -7,6 +7,9 @@ import 'node-fetch';
 import {
     Movement
 } from '../classes/Movement';
+import {
+    redirectLocation
+} from '../common/common';
 
 
 const loader = document.getElementById('loader');
@@ -53,12 +56,17 @@ function beforeMovement() {
 }
 
 async function loadFirstMovement(game, firstMovement) {
-    loader.classList.add('active');
-    const movement = await Movement.getMovement(localStorage.token, game, firstMovement);
-    loadedMovements.push(movement.movement);
-    insertMovementBoard(loadedMovements[positionMovement]);
-    loader.classList.remove('active');
-    return movement.next;
+    try {
+        loader.classList.add('active');
+        const movement = await Movement.getMovement(localStorage.token, game, firstMovement);
+        loadedMovements.push(movement.movement);
+        insertMovementBoard(loadedMovements[positionMovement]);
+        loader.classList.remove('active');
+        return movement.next;
+    } catch (error) {
+        console.log(error);
+        if (error === 401) redirectLocation(location.href)
+    }
 }
 
 
@@ -75,13 +83,14 @@ async function loadMovements(game, firstMovement) {
         }
     } catch (error) {
         console.log(error);
+        if (error === 401) redirectLocation(location.href)
     }
 }
 
 function addHandlers() {
     nextButton.addEventListener('click', nextMovement);
     beforeButton.addEventListener('click', beforeMovement);
-    returnButton.addEventListener('click', () => history.back());
+    returnButton.addEventListener('click', () => location = `${location.origin}/list.html?player=${localStorage.playerId}`);
 }
 
 function loadWindow() {

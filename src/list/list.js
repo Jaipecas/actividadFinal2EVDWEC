@@ -5,6 +5,9 @@ import '../common/common.css'
 import 'regenerator-runtime/runtime';
 import 'node-fetch';
 import {
+    redirectLocation
+} from '../common/common';
+import {
     Player
 } from '../classes/Player.js';
 import {
@@ -14,6 +17,8 @@ import {
 const headerPlayerName = document.getElementById('player-name');
 const loader = document.getElementById('loader');
 let gamesData;
+
+console.log(location.href);
 
 function buildGameInfoTemplate(id, date) {
     let html = "";
@@ -100,6 +105,7 @@ async function loadPlayerData(token, id) {
         headerPlayerName.innerText = player.name;
     } catch (error) {
         console.log(error);
+        if (error === 401) redirectLocation(location.href)
     }
 }
 
@@ -113,6 +119,7 @@ async function loadGamesData(token, id) {
         addButtonsListeners(gamesData);
     } catch (error) {
         console.log(error);
+        if (error === 401) redirectLocation(location.href)
     }
 }
 //quiza cambiar 

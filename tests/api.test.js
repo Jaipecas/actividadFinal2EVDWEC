@@ -52,7 +52,7 @@ describe('fetchGET', () => {
       try {
         await fetchGET('https://dwec-tres-en-raya.herokuapp.com/player/3333', 'abcd');
       } catch (error) {
-        expect(error.message).toBe('500');
+        expect(error).toBe(500);
       }
     });
   });

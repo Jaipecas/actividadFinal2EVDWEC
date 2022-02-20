@@ -8,8 +8,6 @@ const isProduction = process.env.NODE_ENV == 'production';
 
 const stylesHandler = 'style-loader';
 
-
-
 const config = {
     entry: {
         index: ["regenerator-runtime/runtime.js", './src/index/index.js'],
@@ -26,17 +24,17 @@ const config = {
     plugins: [
         new HtmlWebpackPlugin({
             filename: 'index.html',
-            template: './src/index/index.html',
+            template: path.resolve(__dirname, 'src/index', "index.html"),
             chunks: ['index'],
         }),
         new HtmlWebpackPlugin({
             filename: 'list.html',
-            template: './src/list/list.html',
+            template: path.resolve(__dirname, 'src/list', "list.html"),
             chunks: ['list'],
         }),
         new HtmlWebpackPlugin({
             filename: 'game.html',
-            template: './src/game/game.html',
+            template: path.resolve(__dirname, 'src/game', "game.html"),
             chunks: ['game'],
         }),
 
