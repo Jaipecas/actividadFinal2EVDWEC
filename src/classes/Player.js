@@ -20,14 +20,12 @@ class Player {
     }
 
     static async getPlayerInfo(token, playerId) {
-        const response = await fetchGET(`https://dwec-tres-en-raya.herokuapp.com/player/${playerId}`, token);
-        const json = await response.json();
+        const json = await fetchGET(`https://dwec-tres-en-raya.herokuapp.com/player/${playerId}`, token);
         return new Player(json.id, json.username, json.name);
     }
 
     static async getPlayerGames(token, playerId) {
-        const response = await fetchGET(`https://dwec-tres-en-raya.herokuapp.com/player/${playerId}/games`, token);
-        return response.json();
+        return fetchGET(`https://dwec-tres-en-raya.herokuapp.com/player/${playerId}/games`, token);
     }
 
 }

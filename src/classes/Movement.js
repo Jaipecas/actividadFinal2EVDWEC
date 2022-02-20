@@ -8,8 +8,7 @@ class Movement {
     }
 
     static async getMovement(token, gameId, move){
-        const response = await fetchGET(`https://dwec-tres-en-raya.herokuapp.com/game/${gameId}/movements/${move}`, token);
-        const json = await response.json();
+        const json = await fetchGET(`https://dwec-tres-en-raya.herokuapp.com/game/${gameId}/movements/${move}`, token);
         return new Movement(json.movement, json.next);
     }
 }

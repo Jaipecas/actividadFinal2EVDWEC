@@ -9,13 +9,14 @@ async function fetchPOST(url, contentType, body) {
             },
             body: JSON.stringify(body)
         });
+        if (response.status === 401) throw Error('El usuario o constraseña no son válidos');
+        if (response.status !== 200) throw Error(response.status);
 
-        if (response.status !== 200) return Promise.reject(`Error: ${response.status}`);
-        
         const data = await response.json();
+
         return data;
     } catch (error) {
-        return Promise.reject(error.message);
+        return Error(error.message);
     }
 }
 
@@ -28,11 +29,13 @@ async function fetchGET(url, token) {
             }
         });
         if (response.status === 401) location = location.origin;
-        if (response.status !== 200) return Promise.reject(`Error: ${response.status}`);
+        if (response.status !== 200) throw Error(response.status);
 
-        return response;
+        const data = await response.json();
+
+        return data;
     } catch (error) {
-        return Promise.reject(error.message);
+        return Error(error.message);
     }
 }
 

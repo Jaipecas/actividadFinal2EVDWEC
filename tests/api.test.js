@@ -10,16 +10,9 @@ jest.mock('node-fetch');
 describe('fetchGET', () => {
 
   it('fetchs the URL', async () => {
-    const response = {
-      status: 200,
-      url: 'https://dwec-tres-en-raya.herokuapp.com/player/3'
-    }
+    await fetchGET('https://dwec-tres-en-raya.herokuapp.com/player/3', 'abcd');
 
-    fetch.mockResolvedValueOnce(response);
-
-    const result = await fetchGET('https://dwec-tres-en-raya.herokuapp.com/player/3', 'abcd');
-
-    expect(result.url).toBe('https://dwec-tres-en-raya.herokuapp.com/player/3');
+    expect(fetch.mock.lastCall[0]).toBe('https://dwec-tres-en-raya.herokuapp.com/player/3');
   })
 
   it('returns the json data', async () => {
@@ -35,26 +28,16 @@ describe('fetchGET', () => {
     }
 
     fetch.mockResolvedValueOnce(response);
-
-    const result = await fetchGET('https://dwec-tres-en-raya.herokuapp.com/player/3', 'abcd');
-    const data = await result.json();
+    const data = await fetchGET('https://dwec-tres-en-raya.herokuapp.com/player/3', 'abcd');
 
     expect(data.name).toBe('Player 3');
   })
 
   it('includes the authorization token', async () => {
-    const response = {
-      status: 200,
-      headers: {
-        "authorization": `Bearer abcd`
-      }
-    }
+    await fetchGET('https://dwec-tres-en-raya.herokuapp.com/player/3', 'abcd');
+    const callInfo = fetch.mock.lastCall[1];
 
-    fetch.mockResolvedValueOnce(response);
-
-    const result = await fetchGET('https://dwec-tres-en-raya.herokuapp.com/player/3', 'abcd');
-
-    expect(result.headers.authorization).toBe('Bearer abcd');
+    expect(callInfo.headers.authorization).toBe('Bearer abcd');
 
   })
 
@@ -69,7 +52,7 @@ describe('fetchGET', () => {
       try {
         await fetchGET('https://dwec-tres-en-raya.herokuapp.com/player/3333', 'abcd');
       } catch (error) {
-        expect(error).toBe(`Error: 500`);
+        expect(error.message).toBe('500');
       }
     });
   });

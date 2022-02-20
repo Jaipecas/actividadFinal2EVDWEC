@@ -12,8 +12,7 @@ class Game {
     }
 
     static async getGameData(token, gameId) {
-        const response = await fetchGET(`https://dwec-tres-en-raya.herokuapp.com/game/${gameId}`, token);
-        const json = await response.json();
+        const json = await fetchGET(`https://dwec-tres-en-raya.herokuapp.com/game/${gameId}`, token);
         return new Game(json.id, json.player, json.date, json.result, json.first_movement);
     }
 }
