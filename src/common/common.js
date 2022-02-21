@@ -9,6 +9,7 @@ async function fetchPOST(url, contentType, body) {
             },
             body: JSON.stringify(body)
         });
+
         if (response.status === 401) return Promise.reject('El usuario o constraseña no son válidos');
         if (response.status !== 200) return Promise.reject(response.status);
 
@@ -28,6 +29,7 @@ async function fetchGET(url, token) {
                 "authorization": `Bearer ${token}`
             }
         });
+
         if (response.status !== 200) return Promise.reject(response.status);
 
         const data = await response.json();

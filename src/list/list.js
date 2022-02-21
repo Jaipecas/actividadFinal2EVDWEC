@@ -1,7 +1,7 @@
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../list/list.css'
 import '../common/common.css'
+import '../list/list.css'
 import 'regenerator-runtime/runtime';
 import 'node-fetch';
 import {
@@ -16,9 +16,7 @@ import {
 
 const headerPlayerName = document.getElementById('player-name');
 const loader = document.getElementById('loader');
-let gamesData;
 
-console.log(location.href);
 
 function buildGameInfoTemplate(id, date) {
     let html = "";
@@ -99,35 +97,34 @@ function addButtonsListeners(gamesData) {
     })
 }
 
-async function loadPlayerData(token, id) {
-    try {
-        let player = await Player.getPlayerInfo(token, id);
-        headerPlayerName.innerText = player.name;
-    } catch (error) {
-        console.log(error);
-        if (error === 401) redirectLocation(location.href)
-    }
+function loadTemplate(dataList) {
+    headerPlayerName.innerText = dataList[0].name;
+    buildGameTemplate(dataList[1]);
+    addButtonsListeners(dataList[1]);
 }
 
-async function loadGamesData(token, id) {
-    try {
-        let arrayGames = await Player.getPlayerGames(token, id);
-        let gameArrayPromise = arrayGames.map(gameId => Game.getGameData(token, gameId));
-        gamesData = await Promise.all(gameArrayPromise);
-
-        buildGameTemplate(gamesData);
-        addButtonsListeners(gamesData);
-    } catch (error) {
-        console.log(error);
-        if (error === 401) redirectLocation(location.href)
-    }
+async function getGamesData(token, id) {
+    let arrayGames = await Player.getPlayerGames(token, id);
+    let gameArrayPromise = arrayGames.map(gameId => Game.getGameData(token, gameId));
+    return Promise.all(gameArrayPromise);
 }
-//quiza cambiar 
+
 async function loadWindow() {
-    loader.classList.add('active');
-    loadPlayerData(localStorage.token, localStorage.playerId);
-    await loadGamesData(localStorage.token, localStorage.playerId);
-    loader.classList.remove('active');
+    try {
+        let dataPromises = [];
+
+        loader.classList.add('active');
+        dataPromises.push(Player.getPlayerInfo(localStorage.token, localStorage.playerId));
+        dataPromises.push(getGamesData(localStorage.token, localStorage.playerId));
+
+        let dataList = await Promise.all(dataPromises);
+        loadTemplate(dataList)
+        loader.classList.remove('active');
+
+    } catch (error) {
+        console.log(error);
+        if (error === 401) redirectLocation(location.href)
+    }
 }
 
 window.onload = loadWindow;

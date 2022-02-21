@@ -33,7 +33,6 @@ async function signIn(username, pass) {
         if (form.checkValidity()) {
             loader.classList.add('active')
             const loginData = await Player.loginFetch(username, pass);
-            console.log(loginData)
             loader.classList.remove('active')
             form.classList.add('was-validated')
             saveInStorage(loginData.access_token, loginData.player_id);
